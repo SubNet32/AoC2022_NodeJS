@@ -35,9 +35,11 @@ function loadDay(day: DayFile) {
       encoding: 'utf-8',
     })
     .split('\r\n')
+
   if (fastMode) DayResolver(day, content, 0)
-  else
+  else {
     rl.question(`Part: `, (input) => {
       DayResolver(day, content, input?.includes('2') ? 2 : 1)
     })
+  }
 }

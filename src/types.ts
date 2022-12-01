@@ -4,7 +4,7 @@ export type DayFile = {
   isTest: boolean
 }
 
-export type DayResult = {
-  solve1: (input: string[]) => Promise<string>
-  solve2: (input: string[]) => Promise<string>
+export interface DayResult {
+  solve1: (input: string[]) => Promise<any>
+  solve2: (input: string[]) => Promise<any>
 }

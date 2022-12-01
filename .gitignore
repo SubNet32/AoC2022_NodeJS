@@ -105,3 +105,5 @@ dist
 
 # TernJS port file
 .tern-port
+.vs/VSWorkspaceState.json
+.vs/AoC2022_NodeJS/v17/.suo
