@@ -3,7 +3,7 @@ import { DayFile } from '../types'
 const Utils = {
   mapFiles(files: string[]): DayFile[] {
     return files
-      .filter((q) => q.match(/.*day\d{2}(_test)?.txt/g))
+      .filter((q) => q.match(/^day\d{2}(_test)?.txt/g))
       .map((file) => ({
         file,
         day: Utils.extractDay(file),
