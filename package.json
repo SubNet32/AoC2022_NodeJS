@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "npx tsc & node build/main.js"
+    "dev": "npx tsc & node build/main.js"
   },
   "author": "",
   "license": "MIT",

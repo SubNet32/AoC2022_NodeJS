@@ -20,16 +20,16 @@ const Utils = {
   getMaxDay(files: DayFile[]) {
     return files.reduce((result, current) => {
       if (result === undefined) return current
-      if (
-        result.day > current.day ||
-        (result.day === current.day && !result.isTest)
-      )
-        return result
+      if (result.day > current.day || (result.day === current.day && !result.isTest)) return result
       return current
     }, undefined)
   },
   XOR(a: any, b: any) {
     return (!!a && !b) || (!a && !!b)
+  },
+  logAndPassThrough<T>(value: T, message?: string) {
+    console.log(message ?? '', value)
+    return value
   },
 }
 
