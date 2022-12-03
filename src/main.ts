@@ -5,7 +5,6 @@ import { DayResolver } from './DayResolver'
 import { DayFile } from './types'
 import Utils from './Utils/Utils'
 
-const fastMode = true
 const filesPath = './Files/'
 const rl = readline.createInterface({
   input: process.stdin,
@@ -13,33 +12,23 @@ const rl = readline.createInterface({
 })
 
 console.log('AoC2022 - By Philipp Priller')
+const args = Utils.getProcessArgs()
 const files = Utils.mapFiles(fileSystem.readdirSync(filesPath))
-const maxDay = Utils.getMaxDay(files)
-if (fastMode) loadDay(maxDay)
-else rl.question(`Input Day (${maxDay.day}): `, handleDayInput)
-function handleDayInput(input: string) {
-  if (!input || input === '\r\n') return loadDay(maxDay)
-  const parsedInput = Number.parseInt(input).toString()
-  const matchingDays = files.filter(
-    (f) =>
-      f.file.includes(parsedInput.toString()) &&
-      Utils.XOR(input.toLowerCase().includes('t'), !f.isTest)
+if (!!args.day)
+  loadDay(
+    files.find((f) => f.day === args.day && f.isTest === args.test),
+    args.part
   )
-  if (matchingDays.length < 1) return console.error(`Invalid Input '${input}'`)
-  loadDay(matchingDays[0])
-}
+loadDay(Utils.getMaxDay(files, args.test), args.part)
 
-function loadDay(day: DayFile) {
+function loadDay(day: DayFile, part?: number) {
+  if (!day) throw `File for day-test combination does not exist`
+  const file = path.join(filesPath, day.file)
   const content = fileSystem
-    .readFileSync(path.join(filesPath, day.file), {
+    .readFileSync(file, {
       encoding: 'utf-8',
     })
     .split('\r\n')
 
-  if (fastMode) DayResolver(day, content, 0)
-  else {
-    rl.question(`Part: `, (input) => {
-      DayResolver(day, content, input?.includes('2') ? 2 : 1)
-    })
-  }
+  DayResolver(day, content, part ?? 0)
 }
