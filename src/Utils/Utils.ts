@@ -20,15 +20,15 @@ const Utils = {
   getMaxDay(files: DayFile[], getTest: boolean) {
     return files.reduce((maxDay, currentDay) => {
       if (maxDay === undefined) return currentDay
-      if (currentDay.day > maxDay.day || (currentDay.day === maxDay.day && !currentDay.isTest && !getTest)) return currentDay
+      if (currentDay.day > maxDay.day || (currentDay.day === maxDay.day && currentDay.isTest === getTest)) return currentDay
       return maxDay
     }, undefined)
   },
   XOR(a: any, b: any) {
     return (!!a && !b) || (!a && !!b)
   },
-  logAndPassThrough<T>(value: T, message?: string) {
-    console.log(message ?? '', value)
+  logAndPassThrough<T>(value: T, message?: string, printIf?: (value: T) => boolean) {
+    if (!printIf || !!printIf(value)) console.log(message ?? '', value)
     return value
   },
   getNumberFromString(stringToParse: string, ignoreExceptions?: boolean) {

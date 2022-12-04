@@ -30,5 +30,5 @@ function loadDay(day: DayFile, part?: number) {
     })
     .split('\r\n')
 
-  DayResolver(day, content, part ?? 0)
+  DayResolver(day, content, part)
 }

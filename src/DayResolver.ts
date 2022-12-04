@@ -6,33 +6,38 @@ async function importDay(day: number): Promise<DayResult | undefined> {
   return (await import(`./Days/Day${dayId}/Day`)).default()
 }
 
-export async function DayResolver(dayFile: DayFile, input: string[], part: number) {
+export async function DayResolver(dayFile: DayFile, input: string[], part: number | undefined) {
   const day = await importDay(dayFile.day)
   if (!day) throw 'invalid day'
 
-  if (part === 0) {
+  console.log(`Running Day${dayFile.day} P${part ?? '?'}${dayFile.isTest ? ' Test' : ''}`)
+  if (!part) {
     day
       .solve2(input)
       .then((result) => {
-        if (!result) day.solve1(input).then((result) => handleResult(result, 1))
+        if (result === '') day.solve1(input).then((result) => handleResult(result, 1))
         else handleResult(result, 2)
       })
-      .catch(console.error)
+      .catch(handleError)
   } else if (part === 2)
     day
       .solve2(input)
       .then((result) => handleResult(result, 2))
-      .catch(console.error)
+      .catch(handleError)
   else if (part === 1)
     day
       .solve1(input)
       .then((result) => handleResult(result, 1))
-      .catch(console.error)
+      .catch(handleError)
   else throw `Invalid Part '${part}'`
 
+  function handleError(reason: any) {
+    console.error('\n\nERROR:', reason, '\n\n')
+    exit()
+  }
+
   function handleResult(result: any, part: number) {
-    console.log(`Result Day${dayFile.day} P${part}${dayFile.isTest ? ' Test' : ''}:`, result.toString())
-    console.log('')
+    console.log(`\nResult Day${dayFile.day} P${part}${dayFile.isTest ? ' Test' : ''}:`, result.toString(), '\n\n')
     exit()
   }
 }
