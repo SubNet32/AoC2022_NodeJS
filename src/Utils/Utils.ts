@@ -46,6 +46,10 @@ const Utils = {
     const part = processArgs.find((a) => a.toLowerCase().includes('part'))
     return { day: this.getNumberFromString(day, true), part: this.getNumberFromString(part, true), test: !!processArgs.find((a) => a.toLowerCase().includes('test')) }
   },
+  containsDuplicate<T>(items: T[]) {
+    if (!items) return undefined
+    return items.length !== new Set(items).size
+  },
 }
 
 export default Utils
