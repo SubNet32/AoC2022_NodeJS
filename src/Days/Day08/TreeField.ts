@@ -8,20 +8,20 @@ const pathsToCheck: IPoint[] = [
   { x: 0, y: 1 },
 ]
 
-export class TreeField {
-  public field: FieldMap<number>
-
-  constructor(input: string[]) {
-    this.field = FieldMap.fromInput(input, (char) => Number.parseInt(char))
+export class TreeField extends FieldMap<number> {
+  public static treeFieldFromInput(input: string[]): TreeField {
+    let field = FieldMap.fromInput<number>(input, (char) => Number.parseInt(char))
+    let treeField = new TreeField(field.boundaries, field.map)
+    return treeField
   }
 
   public checkTreeVisible(point: IPoint) {
-    const treeHight = this.field.getItem(point)
+    const treeHight = this.getItem(point)
     for (let path of pathsToCheck) {
-      const position = new Position(point.x, point.y, this.field.boundaries.end, this.field.boundaries.start)
+      const position = new Position(point.x, point.y, this.boundaries.end, this.boundaries.start)
       while (true) {
         position.movePositionBy(path)
-        if (this.field.getItem(position) >= treeHight) break
+        if (this.getItem(position) >= treeHight) break
         if (position.isAtBounds()) return true
       }
     }
@@ -29,14 +29,14 @@ export class TreeField {
   }
 
   public getViewDistance(point: IPoint) {
-    const treeHight = this.field.getItem(point)
+    const treeHight = this.getItem(point)
     let viewDistance = 1
     for (let path of pathsToCheck) {
-      const position = new Position(point.x, point.y, this.field.boundaries.end, this.field.boundaries.start)
+      const position = new Position(point.x, point.y, this.boundaries.end, this.boundaries.start)
       if (position.isAtBounds()) continue
       while (true) {
         position.movePositionBy(path)
-        if (this.field.getItem(position) >= treeHight || position.isAtBounds()) {
+        if (this.getItem(position) >= treeHight || position.isAtBounds()) {
           viewDistance *= position.getDistanceTo(point)
           break
         }
