@@ -1,4 +1,5 @@
 import SpaceUtils from '../../Utils/SpaceUtils'
+import Vector2 from './Vector2'
 
 export interface IPoint {
   x: number
@@ -10,6 +11,7 @@ export interface IRectangle {
   end: IPoint
 }
 
+const sqrt2 = Math.sqrt(2)
 export class Position implements IPoint {
   public x: number
   public y: number
@@ -49,7 +51,20 @@ export class Position implements IPoint {
     return Math.abs(point.x - this.x) + Math.abs(point.y - this.y)
   }
 
+  public getDistanceVector(point: IPoint): Vector2 {
+    return Vector2.FromPoint(point).subtract(this)
+  }
+
   public getDistanceTo(point: IPoint) {
     return Math.sqrt(Math.pow(point.x - this.x, 2) + Math.pow(point.y - this.y, 2))
+  }
+
+  public isTouching(point: IPoint) {
+    let distanceVector = this.getDistanceVector(point)
+    return Math.abs(distanceVector.x) <= 1 && Math.abs(distanceVector.y) <= 1
+  }
+
+  public toPoint(): IPoint {
+    return { x: this.x, y: this.y }
   }
 }

@@ -1,6 +1,9 @@
 import { IPoint } from '../Models/Space/Position'
 
 const SpaceUtils = {
+  pointToString(point: IPoint) {
+    return `${point.x}|${point.y}`
+  },
   transform1DPoint(p: number, add: number, options?: { min: number; max: number; wrapAround?: boolean; limit?: boolean }) {
     let newP = p + add
     if (!options) return newP

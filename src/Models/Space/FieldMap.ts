@@ -1,3 +1,4 @@
+import SpaceUtils from '../../Utils/SpaceUtils'
 import { IPoint, IRectangle } from './Position'
 
 export class FieldMap<T> {
@@ -9,16 +10,12 @@ export class FieldMap<T> {
     this.map = new Map<string, T>(iterable)
   }
 
-  private pointToMapKey(point: IPoint) {
-    return `${point.x}|${point.y}`
-  }
-
   public addItem(point: IPoint, value: T) {
-    this.map.set(this.pointToMapKey(point), value)
+    this.map.set(SpaceUtils.pointToString(point), value)
   }
 
   public getItem(point: IPoint): T | undefined {
-    return this.map.get(this.pointToMapKey(point))
+    return this.map.get(SpaceUtils.pointToString(point))
   }
 
   public static fromInput<TValue>(input: string[], valueProvider: (char: string) => TValue | undefined) {
