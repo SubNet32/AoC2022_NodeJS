@@ -8,7 +8,7 @@ AdventOfCode by Philipp Priller
 
 ## How to
 
-1. Install node_modules
+1. Install node_modules by running `npm install`
 2. Run `npm run aoc`
 
 ### Selecting Day & Part
