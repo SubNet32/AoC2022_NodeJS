@@ -4,6 +4,11 @@ const SpaceUtils = {
   pointToString(point: IPoint) {
     return `${point.x}|${point.y}`
   },
+  stringToPoint(str: string): IPoint | null {
+    if (!str) return null
+    const [x, y] = str.split('|').map((q) => Number.parseInt(q))
+    return { x, y }
+  },
   transform1DPoint(p: number, add: number, options?: { min: number; max: number; wrapAround?: boolean; limit?: boolean }) {
     let newP = p + add
     if (!options) return newP
@@ -17,7 +22,13 @@ const SpaceUtils = {
     return newP
   },
   printPoint(point: IPoint, prefix?: string, suffix?: string) {
-    console.log(`${prefix ?? 'Pos:'} [${point.x},${point.y}] ${suffix}`)
+    console.log(`${prefix ?? 'Pos:'} [${point.x},${point.y}] ${suffix ?? ''}`)
+  },
+  comparePoints(a: IPoint, b: IPoint) {
+    return a.x === b.x && a.y === b.y
+  },
+  pointsAreAdjacent(a: IPoint, b: IPoint) {
+    return (a.x === b.x && (a.y === b.y + 1 || a.y === b.y - 1)) || (a.y === b.y && (a.x === b.x + 1 || a.x === b.x - 1))
   },
 }
 

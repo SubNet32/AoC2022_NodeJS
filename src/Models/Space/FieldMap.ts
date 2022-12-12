@@ -29,6 +29,10 @@ export class FieldMap<T> {
     return inputMap
   }
 
+  public findItemWithValue(value: T) {
+    return SpaceUtils.stringToPoint(Array.from(this.map.keys()).find((key) => this.map.get(key) === value))
+  }
+
   public print(valuePrinter?: (value: T) => string) {
     console.log([...this.map])
   }
