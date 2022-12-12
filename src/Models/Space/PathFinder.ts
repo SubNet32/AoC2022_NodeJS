@@ -22,7 +22,7 @@ export class PathNode<T> {
   }
 }
 
-export default function PathFinder<T>(field: FieldMap<T>, start: IPoint, getCostToMoveTo?: (current: PathNode<T>, target: PathNode<T>) => number) {
+export default function PathFinder<T>(field: FieldMap<T>, start: IPoint, getCostToMoveTo?: (current: PathNode<T>, target: PathNode<T>) => number, stopEarlyIfNode?: (current: PathNode<T>) => boolean) {
   function InitNode(position: IPoint): PathNode<T> {
     const isStart = SpaceUtils.comparePoints(position, start)
     return new PathNode<T>(position, field.getItem(position), isStart)
@@ -32,6 +32,7 @@ export default function PathFinder<T>(field: FieldMap<T>, start: IPoint, getCost
   const startNode = allNodes.find((n) => n.isStart)
   let currentNode = startNode
   const visitedNodes: PathNode<T>[] = []
+  const possibleNextNodes = new Set<PathNode<T>>()
 
   function getAdjacentNodes(parentNode: PathNode<T>) {
     let adjNodes = allNodes.filter((n) => !visitedNodes.includes(n) && SpaceUtils.pointsAreAdjacent(n.position, parentNode.position))
@@ -39,8 +40,7 @@ export default function PathFinder<T>(field: FieldMap<T>, start: IPoint, getCost
   }
 
   function getNextNode() {
-    let unvisitedNodes = allNodes.filter((n) => !visitedNodes.includes(n) && !!n.cost)
-    if (!unvisitedNodes?.length) return undefined
+    let unvisitedNodes = Array.from(possibleNextNodes)
     unvisitedNodes.sort((a, b) => a.cost - b.cost)
     return unvisitedNodes[0]
   }
@@ -53,9 +53,14 @@ export default function PathFinder<T>(field: FieldMap<T>, start: IPoint, getCost
         n.cost = newCost
         n.prevNode = currentNode
       }
+      possibleNextNodes.add(n)
     })
     visitedNodes.push(currentNode)
+    possibleNextNodes.delete(currentNode)
     currentNode = getNextNode()
+    if (stopEarlyIfNode && stopEarlyIfNode(currentNode)) {
+      break
+    }
     if (!currentNode) {
       break
     }

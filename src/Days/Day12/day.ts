@@ -17,10 +17,15 @@ export default function Day(): DayResult {
     const end = field.findItemWithValue(-2)
     field.addItem(end, 25)
 
-    let pathMap = PathFinder(field, start, (current, target) => {
-      if (target.value > current.value + 1) return null
-      return current.cost + 1
-    })
+    let pathMap = PathFinder(
+      field,
+      start,
+      (current, target) => {
+        if (target.value > current.value + 1) return null
+        return current.cost + 1
+      },
+      (current) => SpaceUtils.comparePoints(current.position, end)
+    )
     let endNode = pathMap.find((p) => SpaceUtils.comparePoints(p.position, end))
     let pathToEndNode = endNode.getPath()
     pathToEndNode.forEach((p) => SpaceUtils.printPoint(p))
@@ -40,10 +45,15 @@ export default function Day(): DayResult {
     const end = field.findItemWithValue(-2)
     field.addItem(end, 25)
 
-    let pathMap = PathFinder(field, end, (current, target) => {
-      if (target.value < current.value - 1) return null
-      return current.cost + 1
-    })
+    let pathMap = PathFinder(
+      field,
+      end,
+      (current, target) => {
+        if (target.value < current.value - 1) return null
+        return current.cost + 1
+      },
+      (current) => current.value === 0
+    )
     let nodesToCheck = pathMap.filter((m) => m.value === 0)
     let shortestPath: number | null = null
     nodesToCheck.forEach((n) => {

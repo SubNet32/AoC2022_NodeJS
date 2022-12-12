@@ -10,6 +10,8 @@ export async function DayResolver(dayFile: DayFile, input: string[], part: numbe
   const day = await importDay(dayFile.day)
   if (!day) throw 'invalid day'
 
+  const startTime = Date.now()
+
   console.log(`Running Day${dayFile.day} P${part ?? '?'}${dayFile.isTest ? ' Test' : ''}`)
   if (!part) {
     day
@@ -37,7 +39,7 @@ export async function DayResolver(dayFile: DayFile, input: string[], part: numbe
   }
 
   function handleResult(result: any, part: number) {
-    console.log(`\nResult Day${dayFile.day} P${part}${dayFile.isTest ? ' Test' : ''}:`, result.toString(), '\n\n')
+    console.log(`\nResult Day${dayFile.day} P${part}${dayFile.isTest ? ' Test' : ''} after ${(Date.now() - startTime) / 1000}s :`, result.toString(), '\n\n')
     exit()
   }
 }
