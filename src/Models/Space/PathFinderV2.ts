@@ -47,7 +47,7 @@ export default function PathFinder<T>(
     let adjNodes: PathNode<T>[] = []
     possibleDirections.forEach((dir) => {
       let node = field.getItem(SpaceUtils.addToPoint(parentNode.position, dir))
-      if (node && !visitedNodes.includes(node) && (!getCostToMoveTo || !!getCostToMoveTo(parentNode, node))) {
+      if (node && (!getCostToMoveTo || !!getCostToMoveTo(parentNode, node))) {
         adjNodes.push(node)
       }
     })
@@ -72,16 +72,15 @@ export default function PathFinder<T>(
       possibleNextNodes.add(n)
     })
     visitedNodes.push(currentNode)
-    let nextNode = getNextNode()
-    possibleNextNodes.delete(nextNode)
-    if (!nextNode) {
+    possibleNextNodes.delete(currentNode)
+    currentNode = getNextNode()
+    if (!currentNode) {
       break
     }
-    if (stopEarlyIfNode && stopEarlyIfNode(nextNode)) {
+    if (stopEarlyIfNode && stopEarlyIfNode(currentNode)) {
       break
     }
-    currentNode = nextNode
   }
 
-  return currentNode
+  return field
 }

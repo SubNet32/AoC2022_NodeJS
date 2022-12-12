@@ -30,6 +30,9 @@ const SpaceUtils = {
   pointsAreAdjacent(a: IPoint, b: IPoint) {
     return (a.x === b.x && (a.y === b.y + 1 || a.y === b.y - 1)) || (a.y === b.y && (a.x === b.x + 1 || a.x === b.x - 1))
   },
+  addToPoint(point: IPoint, add: IPoint) {
+    return { x: point.x + add.x, y: point.y + add.y }
+  },
 }
 
 export default SpaceUtils

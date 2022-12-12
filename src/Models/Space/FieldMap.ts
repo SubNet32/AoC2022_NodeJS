@@ -18,11 +18,11 @@ export class FieldMap<T> {
     return this.map.get(SpaceUtils.pointToString(point))
   }
 
-  public static fromInput<TValue>(input: string[], valueProvider: (char: string) => TValue | undefined) {
+  public static fromInput<TValue>(input: string[], valueProvider: (char: string, x: number, y: number) => TValue | undefined) {
     const inputMap = new FieldMap<TValue>({ start: { x: 0, y: 0 }, end: { x: input[0].length - 1, y: input.length - 1 } })
     input.forEach((line, y) => {
       Array.from(line).forEach((char, x) => {
-        const value = valueProvider(char)
+        const value = valueProvider(char, x, y)
         if (value !== undefined && value !== null) inputMap.addItem({ x, y }, value)
       })
     })
