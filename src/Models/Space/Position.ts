@@ -28,6 +28,10 @@ export class Position implements IPoint {
     if (lowerLimit) this.lowerLimit = lowerLimit
   }
 
+  public static FromPoint(point: IPoint) {
+    return new Position(point.x, point.y)
+  }
+
   public getPoint(): IPoint {
     return { x: this.x, y: this.y }
   }

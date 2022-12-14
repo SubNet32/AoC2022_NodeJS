@@ -36,6 +36,10 @@ export default class Vector2 implements IPoint {
     return this
   }
 
+  public static Add(vectorA: IPoint, vectorB: IPoint) {
+    return new Vector2(vectorA.x + vectorB.x, vectorA.y + vectorB.y)
+  }
+
   public subtract(vector: IPoint) {
     this.x -= vector.x
     this.y -= vector.y
