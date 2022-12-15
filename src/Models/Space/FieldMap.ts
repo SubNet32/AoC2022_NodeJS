@@ -64,4 +64,18 @@ export class FieldMap<T> {
     })
     return max
   }
+
+  public calcBounds(): IRectangle {
+    let min: IPoint = { x: null, y: null }
+    let max: IPoint = { x: null, y: null }
+    Array.from(this.map.keys()).forEach((key) => {
+      let point = SpaceUtils.stringToPoint(key)
+      if (min.x === null || point.x < min.x) min.x = point.x
+      if (min.y === null || point.y < min.y) min.y = point.y
+      if (max.x === null || point.x > max.x) max.x = point.x
+      if (max.y === null || point.y > max.y) max.y = point.y
+    })
+    this.boundaries = { start: min, end: max }
+    return this.boundaries
+  }
 }

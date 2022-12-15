@@ -55,4 +55,12 @@ export default class Vector2 implements IPoint {
   public length() {
     return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2))
   }
+
+  public lineDistanceTo(vector: IPoint) {
+    return Math.abs(this.x - vector.x) + Math.abs(this.y - vector.y)
+  }
+
+  public isSamePosition(point: IPoint) {
+    return this.x === point.x && this.y === point.y
+  }
 }
