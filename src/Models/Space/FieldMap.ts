@@ -55,6 +55,29 @@ export class FieldMap<T> {
     console.log([...this.map])
   }
 
+  public printField(valuePrinter?: (value: T | null) => string, inverseY?: boolean, window?: IRectangle) {
+    let bounds = this.calcBounds()
+    let printStrings: string[] = []
+    let yBounds = { start: bounds.start.y, end: bounds.end.y }
+    let xBounds = { start: bounds.start.x, end: bounds.end.x }
+    if (window) {
+      yBounds = { start: window.start.y, end: window.end.y }
+      xBounds = { start: window.start.x, end: window.end.x }
+    }
+    for (let y = yBounds.start; y <= yBounds.end; y++) {
+      let printsString = ''
+      for (let x = xBounds.start; x <= xBounds.end; x++) {
+        printsString += valuePrinter(this.getItem({ x, y }))
+      }
+      printStrings.push(printsString)
+    }
+    if (inverseY) {
+      printStrings.reverse()
+    }
+    printStrings.forEach((p) => console.log(p))
+    console.log('')
+  }
+
   public getMaximum() {
     let max: IPoint = { x: 0, y: 0 }
     Array.from(this.map.keys()).forEach((key) => {
@@ -65,17 +88,16 @@ export class FieldMap<T> {
     return max
   }
 
-  public calcBounds(): IRectangle {
-    let min: IPoint = { x: null, y: null }
-    let max: IPoint = { x: null, y: null }
-    Array.from(this.map.keys()).forEach((key) => {
-      let point = SpaceUtils.stringToPoint(key)
-      if (min.x === null || point.x < min.x) min.x = point.x
-      if (min.y === null || point.y < min.y) min.y = point.y
-      if (max.x === null || point.x > max.x) max.x = point.x
-      if (max.y === null || point.y > max.y) max.y = point.y
-    })
-    this.boundaries = { start: min, end: max }
-    return this.boundaries
+  public calcBounds(overwriteBounds?: boolean): IRectangle {
+    let bounds = SpaceUtils.getLimitsOfPoints(Array.from(this.map.keys()).map((k) => SpaceUtils.stringToPoint(k)))
+    if (overwriteBounds) {
+      this.boundaries = bounds
+      return this.boundaries
+    }
+    return bounds
+  }
+
+  public isInBounds(point: IPoint) {
+    return !(point.x > this.boundaries.end.x || point.x < this.boundaries.start.x || point.y > this.boundaries.end.y || point.y < this.boundaries.start.y)
   }
 }

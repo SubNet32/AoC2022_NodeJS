@@ -1,4 +1,4 @@
-import { IPoint } from '../Models/Space/Position'
+import { IPoint, IRectangle } from '../Models/Space/Position'
 
 const SpaceUtils = {
   pointToString(point: IPoint) {
@@ -32,6 +32,22 @@ const SpaceUtils = {
   },
   addToPoint(point: IPoint, add: IPoint) {
     return { x: point.x + add.x, y: point.y + add.y }
+  },
+  getLimitsOfPoints(points: IPoint[]): IRectangle {
+    let minX = Math.min(...points.map((p) => p.x))
+    let minY = Math.min(...points.map((p) => p.y))
+    let maxX = Math.max(...points.map((p) => p.x))
+    let maxY = Math.max(...points.map((p) => p.y))
+    return { start: { x: minX, y: minY }, end: { x: maxX, y: maxY } }
+  },
+  movementToPrintString(movement: IPoint) {
+    if (movement.y === 0) {
+      if (movement.x > 0) return 'Right'
+      if (movement.x < 0) return 'Left'
+    }
+    if (movement.y > 0) return 'Up'
+    if (movement.y < 0) return 'Down'
+    return 'None'
   },
 }
 

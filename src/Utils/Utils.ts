@@ -54,6 +54,11 @@ const Utils = {
     if (!items) return 0
     return items.reduce((sum, currentItem) => sum + valueExtractor(currentItem), 0)
   },
+  rotateArray<T>(items: T[]) {
+    let item = items.shift()
+    items.push(item)
+    return item
+  },
 }
 
 export default Utils
