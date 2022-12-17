@@ -85,3 +85,46 @@ export default function PathFinder<T>(
 
   return currentNode
 }
+
+interface PathNode2<T> {
+  node: T
+  prevNode: PathNode2<T> | null
+  cost: number
+}
+
+export function PathFinder2<T>(allNodes: T[], startNode: T, endNode: T, getAdjacentNodes: (current: T) => { node: T; cost: number }[]) {
+  const nodeCount = allNodes.length
+  const visitedNodes: T[] = []
+  let nodesToCheck: PathNode2<T>[] = []
+  let currentNode: PathNode2<T> = { node: startNode, prevNode: null, cost: 0 }
+
+  while (visitedNodes.length < nodeCount) {
+    if (currentNode.node === endNode) break
+    let adjNodes = getAdjacentNodes(currentNode.node).filter((n) => !visitedNodes.includes(n.node))
+    visitedNodes.push(currentNode.node)
+
+    if (adjNodes?.length) {
+      adjNodes.forEach((node) => {
+        let foundNode = nodesToCheck.find((n) => n.node === node)
+        if (!foundNode) {
+          nodesToCheck.push({ ...node, prevNode: currentNode })
+          return
+        }
+        if (foundNode.cost < node.cost) return
+        foundNode.cost = node.cost
+        foundNode.prevNode = currentNode
+      })
+    }
+    nodesToCheck.sort((a, b) => a.cost - b.cost)
+    currentNode = nodesToCheck.shift()
+  }
+
+  let path: T[] = []
+
+  while (currentNode) {
+    path.push(currentNode.node)
+    currentNode = currentNode.prevNode
+  }
+
+  return path
+}

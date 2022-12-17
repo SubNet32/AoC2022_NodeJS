@@ -50,6 +50,10 @@ const Utils = {
     if (!items) return undefined
     return items.length !== new Set(items).size
   },
+  sum<T>(items: T[] | undefined, valueExtractor: (item: T) => number) {
+    if (!items) return 0
+    return items.reduce((sum, currentItem) => sum + valueExtractor(currentItem), 0)
+  },
 }
 
 export default Utils
