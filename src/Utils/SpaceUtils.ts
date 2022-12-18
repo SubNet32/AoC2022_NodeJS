@@ -1,13 +1,22 @@
+import { ICube, IPoint3D } from '../Models/Space/3D/types3D'
 import { IPoint, IRectangle } from '../Models/Space/Position'
 
 const SpaceUtils = {
   pointToString(point: IPoint) {
     return `${point.x}|${point.y}`
   },
+  point3DToString(point: IPoint3D) {
+    return `${point.x}|${point.y}|${point.z}`
+  },
   stringToPoint(str: string): IPoint | null {
     if (!str) return null
     const [x, y] = str.split('|').map((q) => Number.parseInt(q))
     return { x, y }
+  },
+  stringToPoint3D(str: string): IPoint3D | null {
+    if (!str) return null
+    const [x, y, z] = str.split('|').map((q) => Number.parseInt(q))
+    return { x, y, z }
   },
   transform1DPoint(p: number, add: number, options?: { min: number; max: number; wrapAround?: boolean; limit?: boolean }) {
     let newP = p + add
@@ -39,6 +48,15 @@ const SpaceUtils = {
     let maxX = Math.max(...points.map((p) => p.x))
     let maxY = Math.max(...points.map((p) => p.y))
     return { start: { x: minX, y: minY }, end: { x: maxX, y: maxY } }
+  },
+  getLimitsOfPoints3D(points: IPoint3D[]): ICube {
+    let minX = Math.min(...points.map((p) => p.x))
+    let minY = Math.min(...points.map((p) => p.y))
+    let minZ = Math.min(...points.map((p) => p.z))
+    let maxX = Math.max(...points.map((p) => p.x))
+    let maxY = Math.max(...points.map((p) => p.y))
+    let maxZ = Math.max(...points.map((p) => p.z))
+    return { start: { x: minX, y: minY, z: minZ }, end: { x: maxX, y: maxY, z: maxZ } }
   },
   movementToPrintString(movement: IPoint) {
     if (movement.y === 0) {
